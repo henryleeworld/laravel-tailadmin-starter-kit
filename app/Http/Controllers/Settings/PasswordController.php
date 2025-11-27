@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Http\Controllers\Settings;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
+use Illuminate\View\View;
+
+class PasswordController extends Controller
+{
+    public function edit(Request $request): View
+    {
+        return view('pages.auth.settings.password', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    public function update(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', Rules\Password::defaults(), 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => $validated['password'],
+        ]);
+
+        return back()->with('status', 'password-updated');
+    }
+}

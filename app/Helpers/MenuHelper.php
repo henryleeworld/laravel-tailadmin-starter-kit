@@ -4,47 +4,21 @@ namespace App\Helpers;
 
 class MenuHelper
 {
-    public static function getMainNavItems(): array
-    {
-        return [
-            [
-                'icon' => 'dashboard',
-                'name' => __('Dashboard'),
-                'path' => route('dashboard'),
-            ],
-        ];
-    }
-
-    public static function getOthersItems(): array
+    public static function getAdministrationItems(): array
     {
         return [
             [
                 'icon' => 'charts',
-                'name' => __('Example two level'),
+                'name' => __('User Management'),
                 'subItems' => [
-                    ['name' => __('Child'), 'path' => '#', 'pro' => false],
+                    [
+                        'name' => __('Users'),
+                        'path' => route('users.index', absolute: false),
+                        'pro' => false
+                    ],
                 ],
             ],
         ];
-    }
-
-    public static function getMenuGroups(): array
-    {
-        return [
-            [
-                'title' => __('Menu'),
-                'items' => self::getMainNavItems()
-            ],
-            [
-                'title' => __('Others'),
-                'items' => self::getOthersItems()
-            ]
-        ];
-    }
-
-    public static function isActive($path): bool
-    {
-        return request()->is(ltrim($path, '/'));
     }
 
     public static function getIconSvg($iconName): string
@@ -82,5 +56,35 @@ class MenuHelper
         ];
 
         return $icons[$iconName] ?? '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/></svg>';
+    }
+
+    public static function getMainNavItems(): array
+    {
+        return [
+            [
+                'icon' => 'dashboard',
+                'name' => __('Dashboard'),
+                'path' => route('dashboard', absolute: false),
+            ],
+        ];
+    }
+
+    public static function getMenuGroups(): array
+    {
+        return [
+            [
+                'title' => __('Menu'),
+                'items' => self::getMainNavItems()
+            ],
+            [
+                'title' => __('Administration'),
+                'items' => self::getAdministrationItems()
+            ]
+        ];
+    }
+
+    public static function isActive($path): bool
+    {
+        return request()->is(ltrim($path, '/'));
     }
 }
